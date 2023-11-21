@@ -164,6 +164,13 @@ static struct ctl_table ipv6_table_template[] = {
 		.proc_handler	= proc_dointvec
 	},
 	{
+		.procname       = "ip6t_seg6",
+		.data           = &init_net.ipv6.sysctl.ip6t_seg6,
+		.maxlen         = sizeof(int),
+		.mode           = 0644,
+		.proc_handler   = proc_dointvec
+	},
+	{
 		.procname	= "fib_multipath_hash_policy",
 		.data		= &init_net.ipv6.sysctl.multipath_hash_policy,
 		.maxlen		= sizeof(u8),
