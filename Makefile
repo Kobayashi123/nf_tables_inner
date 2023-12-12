@@ -2,7 +2,7 @@
 VERSION = 6
 PATCHLEVEL = 5
 SUBLEVEL = 10
-EXTRAVERSION =
+EXTRAVERSION = nft
 NAME = Hurr durr I'ma ninja sloth
 
 # *DOCUMENTATION*

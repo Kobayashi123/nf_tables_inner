@@ -20,6 +20,7 @@
 #include <linux/tcp.h>
 #include <linux/udp.h>
 #include <net/gre.h>
+#include <net/seg6.h>
 #include <linux/icmpv6.h>
 #include <linux/ip.h>
 #include <linux/ipv6.h>
@@ -171,8 +172,10 @@ void nft_payload_eval(const struct nft_expr *expr,
 {
 	const struct nft_payload *priv = nft_expr_priv(expr);
 	const struct sk_buff *skb = pkt->skb;
+	const struct nf_hook_state *state = pkt->state;
 	u32 *dest = &regs->data[priv->dreg];
 	int offset;
+	int innoff = 0;
 
 	if (priv->len % NFT_REG32_SIZE)
 		dest[priv->len / NFT_REG32_SIZE] = 0;
@@ -193,6 +196,10 @@ void nft_payload_eval(const struct nft_expr *expr,
 		break;
 	case NFT_PAYLOAD_NETWORK_HEADER:
 		offset = skb_network_offset(skb);
+		if (state->net->ipv6.sysctl.nft_seg6 &&
+				ipv6_find_hdr(skb, &innoff, IPPROTO_IPV6, NULL, NULL) == IPPROTO_IPV6) {
+			offset += innoff;
+		}
 		break;
 	case NFT_PAYLOAD_TRANSPORT_HEADER:
 		if (!(pkt->flags & NFT_PKTINFO_L4PROTO) || pkt->fragoff)

@@ -248,6 +248,13 @@ static struct ctl_table ipv6_rotable[] = {
 		.proc_handler	= proc_dointvec,
 	},
 #endif /* CONFIG_NETLABEL */
+	{
+		.procname	= "nft_seg6",
+		.data		= &init_net.ipv6.sysctl.nft_seg6,
+		.maxlen		= sizeof(int),
+		.mode		= 0644,
+		.proc_handler	= proc_dointvec
+	},
 	{ }
 };
 
