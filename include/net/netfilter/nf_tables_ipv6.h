@@ -13,6 +13,9 @@ static inline void nft_set_pktinfo_ipv6(struct nft_pktinfo *pkt)
 	unsigned short frag_off;
 
 	protohdr = ipv6_find_hdr(pkt->skb, &thoff, -1, &frag_off, &flags);
+	if (protohdr == IPPROTO_IPV6)
+		protohdr = ipv6_find_hdr(pkt->skb, &thoff, -1, &frag_off, &flags);
+
 	if (protohdr < 0 || thoff > U16_MAX) {
 		nft_set_pktinfo_unspec(pkt);
 		return;
